@@ -1,0 +1,30 @@
+﻿{
+  "idUserAccount": 1,
+  "login": "user_balance",
+  "userName": "user_balance",
+  "isArchived": false,
+  "idExternal": "302",
+  "lastLogin": "2020-08-06T07:10:57.208978",
+  "roles": [
+    {
+      "idRole": "Admin",
+      "name": "Администратор",
+      "num" :  12.5
+    },
+    {
+      "idRole": "MobileCheck",
+      "name": "Мобильные обходы",
+      "num": 1.5
+    },
+    {
+      "idRole": "MediaService",
+      "name": "Сервер медиа файлов",
+      "num": 34.5
+    },
+    {
+      "idRole": "VoiceHelper",
+      "name": "Голосовые помощники",
+      "num": 45.2
+    }
+  ]
+} 
