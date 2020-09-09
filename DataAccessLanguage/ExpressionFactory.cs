@@ -31,7 +31,12 @@ namespace DataAccessLanguage
             { "for", x => new ForPart(x) },
             { "select", x => new SelectPart(x) },
             { "sum", x => new SumPart() },
-            { "join", x => new JoinPart(x) }
+            { "join", x => new JoinPart(x) },
+            { "equals", x => new EqualsPart(x) },
+            { "notEquals", x => new NotEqualsPart(x) },
+            { "moreThan", x => new MoreThanPart(x) },
+            { "lessThan", x => new LessThanPart(x) },
+            { "iif", x => new IifPart(x) }
         };
     }
 }
