@@ -36,7 +36,8 @@ namespace DataAccessLanguage
             { "notEquals", x => new NotEqualsPart(x) },
             { "moreThan", x => new MoreThanPart(x) },
             { "lessThan", x => new LessThanPart(x) },
-            { "iif", x => new IifPart(x) }
+            { "iif", x => new IifPart(x) },
+            { "where", x => new WherePart(x) }
         };
     }
 }
