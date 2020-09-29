@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataAccessLanguage.Extensions
 {
     public static class IListExtension
     {
-        public static IList<object> Select(this IList<object> list, int startIndex, int endIndex)
+        public static IEnumerable<object> Select(this IEnumerable<object> list, int startIndex, int endIndex)
         {
             if (startIndex > endIndex)
                 throw new ArgumentException("endIndex less then startIndex");
 
-            if (startIndex < 0 || startIndex > list.Count - 1)
+            if (startIndex < 0 || startIndex > list.Count() - 1)
                 throw new ArgumentOutOfRangeException("startIndex out of range");
 
-            if (endIndex < 0 || endIndex > list.Count - 1)
+            if (endIndex < 0 || endIndex > list.Count() - 1)
                 throw new ArgumentOutOfRangeException("endIndex out of range");
 
             List<object> res = new List<object>();
             for (int i = startIndex; i <= endIndex; i++)
-                res.Add(list[i]);
+                res.Add(list.ElementAt(i));
 
             return res;
         }

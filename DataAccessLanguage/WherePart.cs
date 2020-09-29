@@ -20,7 +20,7 @@ namespace DataAccessLanguage
         public object GetValue(object obj) =>
             obj switch
             {
-                IList<object> list => list.Select(x => new { obj = x, result = expression.GetValue(x) }).Where( r => { Boolean.TryParse(r.result?.ToString(), out bool res); return res; }).Select(x => x.obj).ToList(),
+                IEnumerable<object> list => list.Select(x => new { obj = x, result = expression.GetValue(x) }).Where( r => { bool.TryParse(r.result?.ToString(), out bool res); return res; }).Select(x => x.obj).ToList(),
                 _ => null
             };
 

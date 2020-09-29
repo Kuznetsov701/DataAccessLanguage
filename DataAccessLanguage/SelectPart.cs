@@ -18,14 +18,14 @@ namespace DataAccessLanguage
         public object GetValue(object obj) =>
             obj switch
             {
-                IList<object> list => list.Select(x => expression.GetValue(x)).ToList(),
+                IEnumerable<object> list => list.Select(x => expression.GetValue(x)).ToList(),
                 _ => null
             };
 
         public bool SetValue(object obj, object value) =>
             obj switch
             {
-                IList<object> list => list.Select(x => expression.SetValue(x, value)).ToList().Any(x => true),
+                IEnumerable<object> list => list.Select(x => expression.SetValue(x, value)).ToList().Any(x => true),
                 _ => false
             };
     }

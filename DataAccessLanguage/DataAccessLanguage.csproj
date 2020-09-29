@@ -6,8 +6,8 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Реализация iif, lessThen, moreThen, equals, notEquals</PackageReleaseNotes>
-    <Version>1.0.0.1</Version>
+    <PackageReleaseNotes>Замена IList на IEnumerable</PackageReleaseNotes>
+    <Version>1.0.0.3</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>

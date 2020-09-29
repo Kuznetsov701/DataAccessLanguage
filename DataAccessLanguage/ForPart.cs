@@ -21,14 +21,14 @@ namespace DataAccessLanguage
         public object GetValue(object obj) =>
             obj switch
             {
-                IList<object> list => list.Select(begin, end == -1 ? list.Count - 1 : end).ToList(),
+                IEnumerable<object> list => list.Select(begin, end == -1 ? list.Count() - 1 : end).ToList(),
                 _ => null
             };
 
         public bool SetValue(object obj, object value) =>
             obj switch
             {
-                IList<object> list => list.SetValues(begin, end == -1 ? list.Count - 1 : end, value),
+                IList<object> list => list.SetValues(begin, end == -1 ? list.Count() - 1 : end, value),
                 _ => false
             };
     }
