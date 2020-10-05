@@ -37,7 +37,8 @@ namespace DataAccessLanguage
             { "moreThan", x => new MoreThanPart(x) },
             { "lessThan", x => new LessThanPart(x) },
             { "iif", x => new IifPart(x) },
-            { "where", x => new WherePart(x) }
+            { "where", x => new WherePart(x) },
+            { "self", x => new SelfPart() }
         };
     }
 }
