@@ -43,7 +43,8 @@ namespace DataAccessLanguage
             { "toUpper", x => new ToUpperPart() },
             { "groupBy", x => new GroupByPart(x) },
             { "map", x => new MapPart(x) },
-            { "avg", x => new AvgPart() }
+            { "avg", x => new AvgPart() },
+            { "distinct", x => new DistinctPart(x) }
         };
     }
 }
