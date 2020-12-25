@@ -3,24 +3,42 @@
 
 <div class="row">
     <div class="col-6">
-        <Code @bind-Value=@StringExpression class="col-12" style="height: 300px; border: 1px solid #aaaa" />
+        <Code @bind-Value=@StringExpression class="col-12" style="height: 400px; border: 1px solid #aaaa" />
     </div>
     <div class="col-6">
+        <Code Language="json" @bind-Value=@Json class="col-12" style="height: 400px; border: 1px solid #aaaa" />
         <label style="color:orangered">@Errors</label>
     </div>
 </div>
 <div class="row">
-    <div class="col-6">
-        <Code Language="json" @bind-Value=@Json class="col-12" style="height: 300px; border: 1px solid #aaaa" />    
-    </div>
-    <div class="col-6">
-        <code>@ExpressionResult</code>
+    <div class="col-12">
+        <pre>@(ExpressionResult ?? ExpressionResult)</pre>
     </div>
 </div>
 
 @code{
 
-    private string _Json;
+private string _Json = @"[
+{
+""kek"" : ""pekl"",
+""num"": 8
+},
+     {
+        ""kek"" : ""pekl"",
+        ""num"": 12.5
+    },
+     {
+        ""kek"" : ""pekl2e"",
+        ""num"": 1.23
+    },
+     {
+        ""kek"" : ""pekl"",
+        ""num"": 23.45
+    }, {
+        ""kek"" : ""pekl2e"",
+        ""num"" : 458.4
+    }
+]";
     public string Json
     {
         get => _Json;
@@ -31,7 +49,8 @@
         }
     }
 
-    private string _StringExpression;
+    private string _StringExpression = @"groupBy(kek)
+    .map(Key as kek && select(num).sum() as sum && select(num) as nums)";
     public string StringExpression
     {
         get => _StringExpression;
@@ -46,6 +65,11 @@
 
     public string Errors { get; set; }
 
+    protected override void OnInitialized()
+    {
+        Calculate();
+    }
+
     private void Calculate()
     {
         try
@@ -57,7 +81,7 @@
             serializerOptions.Converters.Add(new JsonToDictionaryConverter());
 
             if (Json.StartsWith('{'))
-                obj = JsonSerializer.Deserialize<Dictionary<string, object>>(Json, serializerOptions);
+            obj = JsonSerializer.Deserialize<Dictionary<string, object>>(Json, serializerOptions);
             else
                 obj = JsonSerializer.Deserialize<IEnumerable<Dictionary<string, object>>>(Json, serializerOptions);
 
