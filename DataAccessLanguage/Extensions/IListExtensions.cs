@@ -24,6 +24,13 @@ namespace DataAccessLanguage.Extensions
             return res;
         }
 
+        public static IEnumerable<T> Foreach<T>(this IEnumerable<T> list, Action<T> action)
+        {
+            foreach (var i in list)
+                action(i);
+            return list;
+        }
+
         public static bool SetValues(this IList<object> list, int startIndex, int endIndex, object value)
         {
             if (startIndex > endIndex)

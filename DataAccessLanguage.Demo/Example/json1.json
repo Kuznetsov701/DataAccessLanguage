@@ -9,7 +9,12 @@
     {
       "idRole": "Admin",
       "name": "Администратор",
-      "num" :  12.5
+      "num": 12.5
+    },
+    {
+      "idRole": "Admin",
+      "name": "Администратор",
+      "num": 11.5
     },
     {
       "idRole": "MobileCheck",
@@ -25,6 +30,11 @@
       "idRole": "VoiceHelper",
       "name": "Голосовые помощники",
       "num": 45.2
+    },
+    {
+      "idRole": "VoiceHelper",
+      "name": "Голосовые помощники",
+      "num": 35.2
     }
   ]
 } 

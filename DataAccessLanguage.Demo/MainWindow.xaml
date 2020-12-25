@@ -56,6 +56,6 @@
 
         <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Попробуй сам</TextBlock>
         <TextBox Text="{Binding ElementName=_this, Path=Expression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" Width="auto" MinWidth="150"/>
-        <TextBox Text="{Binding ElementName=_this, Path=ExpressionResult, Mode=OneWay}" IsReadOnly="True" Margin="5" Width="auto" MinWidth="150"/>
+        <TextBox Height="350" Text="{Binding ElementName=_this, Path=ExpressionResult, Mode=OneWay}" IsReadOnly="True" Margin="5" Width="auto" MinWidth="150"/>
     </StackPanel>
 </Window>

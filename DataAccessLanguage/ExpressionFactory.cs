@@ -40,7 +40,10 @@ namespace DataAccessLanguage
             { "where", x => new WherePart(x) },
             { "self", x => new SelfPart() },
             { "toLower", x => new ToLowerPart() },
-            { "toUpper", x => new ToUpperPart() }
+            { "toUpper", x => new ToUpperPart() },
+            { "groupBy", x => new GroupByPart(x) },
+            { "map", x => new MapPart(x) },
+            { "avg", x => new AvgPart() }
         };
     }
 }

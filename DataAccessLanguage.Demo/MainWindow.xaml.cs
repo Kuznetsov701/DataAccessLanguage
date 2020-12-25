@@ -88,7 +88,7 @@ namespace DataAccessLanguage.Demo
                 new PropertyMetadata(null, (d, e) => (d as MainWindow).OnExpressionPropertyChanged(e)));
         protected virtual void OnExpressionPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            ExpressionResult = Data[Expression];
+            ExpressionResult = JsonSerializer.Serialize(Data[Expression], new JsonSerializerOptions { WriteIndented = true });
         }
         #endregion
 
