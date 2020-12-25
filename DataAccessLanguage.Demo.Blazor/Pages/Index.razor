@@ -1,0 +1,78 @@
+﻿@page "/"
+@inject IExpressionFactory expressionFactory
+
+<div class="row">
+    <div class="col-6">
+        <Code @bind-Value=@StringExpression class="col-12" style="height: 300px; border: 1px solid #aaaa" />
+    </div>
+    <div class="col-6">
+        <label style="color:orangered">@Errors</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <Code Language="json" @bind-Value=@Json class="col-12" style="height: 300px; border: 1px solid #aaaa" />    
+    </div>
+    <div class="col-6">
+        <code>@ExpressionResult</code>
+    </div>
+</div>
+
+@code{
+
+    private string _Json;
+    public string Json
+    {
+        get => _Json;
+        set
+        {
+            _Json = value;
+            Calculate();
+        }
+    }
+
+    private string _StringExpression;
+    public string StringExpression
+    {
+        get => _StringExpression;
+        set
+        {
+            _StringExpression = value;
+            Calculate();
+        }
+    }
+
+    public string ExpressionResult { get; set; }
+
+    public string Errors { get; set; }
+
+    private void Calculate()
+    {
+        try
+        {
+
+            object obj = null;
+
+            JsonSerializerOptions serializerOptions = new JsonSerializerOptions { WriteIndented = true };
+            serializerOptions.Converters.Add(new JsonToDictionaryConverter());
+
+            if (Json.StartsWith('{'))
+                obj = JsonSerializer.Deserialize<Dictionary<string, object>>(Json, serializerOptions);
+            else
+                obj = JsonSerializer.Deserialize<IEnumerable<Dictionary<string, object>>>(Json, serializerOptions);
+
+            IExpression expression = expressionFactory.Create(StringExpression);
+            object res = expression.GetValue(obj);
+            ExpressionResult = JsonSerializer.Serialize(res, serializerOptions);
+
+            Errors = null;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Errors = ex.Message;
+            StateHasChanged();
+            throw;
+        }
+    }
+}

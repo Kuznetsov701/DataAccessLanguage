@@ -1,0 +1,49 @@
+﻿@inject NavigationManager nm
+@inject IJSRuntime jsRuntime
+@inject IJsLazyLoad jsLazyLoad
+
+<BlazorStyle Href=@(nm.BaseUri + "monaco/min/vs/editor/editor.main.css") />
+
+<label>@Title</label>
+<div @ref="codeEditor" @attributes=@Attributes
+     @onkeyup=@(async x => {
+                    Value = await editor.InvokeAsync<string>("getValue");
+                    await ValueChanged.InvokeAsync(Value);
+                })></div>
+
+@code{
+    ElementReference codeEditor;
+    IJSObjectReference editor;
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Value { get; set; }
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public string Language { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            await base.OnInitializedAsync();
+            await jsLazyLoad.LoadAsync(nm.BaseUri + "setRequire.js");
+            await jsLazyLoad.LoadAsync(nm.BaseUri + "monaco/min/vs/loader.js");
+            await jsLazyLoad.LoadAsync(nm.BaseUri + "monaco/min/vs/editor/editor.main.nls.js");
+            await jsLazyLoad.LoadAsync(nm.BaseUri + "monaco/min/vs/editor/editor.main.js");
+            await jsLazyLoad.LoadAsync(nm.BaseUri + "createEditor.js");
+
+            editor = await jsRuntime.InvokeAsync<IJSObjectReference>("createEditor", codeEditor, Language);
+            if(editor != null)
+                await editor.InvokeVoidAsync("setValue", Value);
+        }
+    }
+}
