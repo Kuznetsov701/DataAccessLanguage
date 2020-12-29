@@ -1,0 +1,14 @@
+﻿map(
+    taskEntity.idTaskEntity  && 
+    taskEntity.title   =>    title &&
+    steps.groupBy(employeeId)
+         .map( 
+                Key => idStep &&    
+                select(employee.userName).distinct()[0] => employeeName &&
+                select(taskStepType.name) => steps
+             )[0] => employee &&
+    krk &&
+    concat("Задание "" && taskEntity.title && "" с шагами: "" && 
+           steps.select(taskStepType.name).join("; ") && """
+        ) => concat
+)

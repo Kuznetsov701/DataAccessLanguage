@@ -6,8 +6,8 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Реализация функций groupBy(), map(...), avg()</PackageReleaseNotes>
-    <Version>1.0.0.6</Version>
+    <PackageReleaseNotes>Модификация concat(expression|"constString" =&gt; fieldName...).</PackageReleaseNotes>
+    <Version>1.0.0.8</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>

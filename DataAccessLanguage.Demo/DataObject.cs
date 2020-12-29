@@ -11,9 +11,9 @@ namespace DataAccessLanguage.Demo
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Dictionary<string, object> Object { get; private set; }
+        public object Object { get; private set; }
 
-        public DataObject(Dictionary<string, object> obj, IExpressionFactory expressionFactory)
+        public DataObject(object obj, IExpressionFactory expressionFactory)
         {
             this.expressionFactory = expressionFactory;
             this.Object = obj;

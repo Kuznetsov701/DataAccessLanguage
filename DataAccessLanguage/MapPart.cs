@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DataAccessLanguage
 {
@@ -15,14 +16,24 @@ namespace DataAccessLanguage
         {
             IExpressionFactory expressionFactory = new ExpressionFactory();
 
-            parameter.Split("&&").Foreach(x =>
+            Regex regex = new Regex(@"(?<expr>(((?!=>.*)[^()&=>]+)|(?<kek>\((?>[^()]+|\((?<depth>)|\)(?<-depth>))*(?(depth)(?!))\)))+)([\s]*=>[\s]*(?'name'[\w\d]+))*&{0,2}");
+
+            var col = regex.Matches(parameter.Replace("\n.", ".").Replace("\n", " ").Replace("\r", " ").Replace("\t", " "));
+
+            int nonameCount = 0;
+            foreach (Match x in col)
             {
-                string[] e = x.Split(" as ");
-                if (e.Length > 1)
-                    expressions.Add(e[1].Trim(' '), expressionFactory.Create(e[0]));
-                else
-                    expressions.Add(e[0].Split('.')[0].Trim(' '), expressionFactory.Create(e[0]));
-            });
+                if (x.Groups["expr"].Success && !string.IsNullOrWhiteSpace(x.Groups["expr"].Value))
+                {
+                    string name = x.Groups["name"].Value;
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        name = "noname" + ((nonameCount == 0) ? "" : "_" + nonameCount.ToString());
+                        nonameCount++;
+                    }
+                    expressions.Add(name, expressionFactory.Create(x.Groups["expr"].Value));
+                }
+            }
         }
 
         public object GetValue(object obj) =>

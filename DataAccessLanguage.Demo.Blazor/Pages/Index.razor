@@ -1,12 +1,14 @@
 ﻿@page "/"
 @inject IExpressionFactory expressionFactory
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
 
 <div class="row">
     <div class="col-6">
-        <Code @bind-Value=@StringExpression class="col-12" style="height: 400px; border: 1px solid #aaaa" />
+        <Code Title="Запрос" @bind-Value=@StringExpression class="col-12" style="height: 400px; border: 1px solid #aaaa" />
     </div>
     <div class="col-6">
-        <Code Language="json" @bind-Value=@Json class="col-12" style="height: 400px; border: 1px solid #aaaa" />
+        <Code Title="Данные" Language="json" @bind-Value=@Json class="col-12" style="height: 400px; border: 1px solid #aaaa" />
         <label style="color:orangered">@Errors</label>
     </div>
 </div>
@@ -18,27 +20,7 @@
 
 @code{
 
-private string _Json = @"[
-{
-""kek"" : ""pekl"",
-""num"": 8
-},
-     {
-        ""kek"" : ""pekl"",
-        ""num"": 12.5
-    },
-     {
-        ""kek"" : ""pekl2e"",
-        ""num"": 1.23
-    },
-     {
-        ""kek"" : ""pekl"",
-        ""num"": 23.45
-    }, {
-        ""kek"" : ""pekl2e"",
-        ""num"" : 458.4
-    }
-]";
+    private string _Json;
     public string Json
     {
         get => _Json;
@@ -49,8 +31,7 @@ private string _Json = @"[
         }
     }
 
-    private string _StringExpression = @"groupBy(kek)
-    .map(Key as kek && select(num).sum() as sum && select(num) as nums)";
+    private string _StringExpression;
     public string StringExpression
     {
         get => _StringExpression;
@@ -65,8 +46,10 @@ private string _Json = @"[
 
     public string Errors { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        _Json = await httpClient.GetStringAsync(navigationManager.BaseUri + "defaultData.json");
+        _StringExpression = await httpClient.GetStringAsync(navigationManager.BaseUri + "defaultExpression.txt");
         Calculate();
     }
 
@@ -74,14 +57,16 @@ private string _Json = @"[
     {
         try
         {
-
             object obj = null;
 
-            JsonSerializerOptions serializerOptions = new JsonSerializerOptions { WriteIndented = true };
+            JsonSerializerOptions serializerOptions = new JsonSerializerOptions {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
+            };
             serializerOptions.Converters.Add(new JsonToDictionaryConverter());
 
             if (Json.StartsWith('{'))
-            obj = JsonSerializer.Deserialize<Dictionary<string, object>>(Json, serializerOptions);
+                obj = JsonSerializer.Deserialize<Dictionary<string, object>>(Json, serializerOptions);
             else
                 obj = JsonSerializer.Deserialize<IEnumerable<Dictionary<string, object>>>(Json, serializerOptions);
 
@@ -96,7 +81,6 @@ private string _Json = @"[
         {
             Errors = ex.Message;
             StateHasChanged();
-            throw;
         }
     }
 }

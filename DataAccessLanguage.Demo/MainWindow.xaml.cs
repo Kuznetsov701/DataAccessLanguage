@@ -14,7 +14,7 @@ namespace DataAccessLanguage.Demo
             Json = File.ReadAllText("Example/json1.json");
             var options = new JsonSerializerOptions();
             options.Converters.Add(new JsonToDictionaryConverter());
-            Data = new DataObject(JsonSerializer.Deserialize<Dictionary<string, object>>(Json, options), new ExpressionFactory());
+            Data = new DataObject(JsonSerializer.Deserialize<IEnumerable<Dictionary<string, object>>>(Json, options), new ExpressionFactory());
             Data.PropertyChanged += Data_PropertyChanged;
         }
 
