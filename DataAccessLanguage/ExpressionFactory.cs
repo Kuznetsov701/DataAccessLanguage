@@ -45,7 +45,8 @@ namespace DataAccessLanguage
             { "map", x => new MapPart(x) },
             { "concat", x => new ConcatPart(x) },
             { "avg", x => new AvgPart() },
-            { "distinct", x => new DistinctPart(x) }
+            { "distinct", x => new DistinctPart(x) },
+            { "selectMany", x => new SelectManyPart(x) }
         };
     }
 }

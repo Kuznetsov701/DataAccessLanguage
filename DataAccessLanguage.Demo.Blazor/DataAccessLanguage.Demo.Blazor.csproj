@@ -5,6 +5,7 @@
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     <BlazorEnableCompression>false</BlazorEnableCompression>
     <BlazorCacheBootResources>false</BlazorCacheBootResources>
+    <BlazorWebAssemblyEnableLinking>false</BlazorWebAssemblyEnableLinking>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,7 +8,7 @@ self.addEventListener('fetch', event => event.respondWith(onFetch(event)));
 
 const cacheNamePrefix = 'offline-cache-';
 const cacheName = `${cacheNamePrefix}${self.assetsManifest.version}`;
-const offlineAssetsInclude = [/\.dll$/, /\.pdb$/, /\.wasm/, /\.html/, /\.js$/, /\.json$/, /\.css$/, /\.woff$/, /\.png$/, /\.jpe?g$/, /\.gif$/, /\.ico$/];
+const offlineAssetsInclude = [/\.dll$/, /\.pdb$/, /\.wasm/, /\.html/, /\.js$/, /\.json$/, /\.css$/, /\.woff$/, /\.png$/, /\.jpe?g$/, /\.gif$/, /\.ico$/, /\.blat$/, /\.dat$/];
 const offlineAssetsExclude = [/^service-worker\.js$/];
 
 async function onInstall(event) {
@@ -17,7 +17,11 @@ async function onInstall(event) {
     const assetsRequests = self.assetsManifest.assets
         .filter(asset => offlineAssetsInclude.some(pattern => pattern.test(asset.url)))
         .filter(asset => !offlineAssetsExclude.some(pattern => pattern.test(asset.url)))
-        .map(asset => new Request(asset.url + '?' + self.assetsManifest.version));
+        .map(asset => {
+            if (asset.url.includes('index.html'))
+                return new Request(asset.url);
+            return new Request(asset.url + '?' + self.assetsManifest.version);
+        });
     await caches.open(cacheName).then(cache => cache.addAll(assetsRequests));
     self.skipWaiting();
 }
@@ -41,7 +45,7 @@ async function onFetch(event) {
 
         let request = shouldServeIndexHtml ? 'index.html' : event.request;
 
-        if (request.url && self.assetsManifest.assets.some(pattern => request.url.toString().includes(pattern.url)))
+        if (!shouldServeIndexHtml && request.url && self.assetsManifest.assets.some(pattern => request.url.toString().includes(pattern.url)))
             request = new Request(request.url.toString() + '?' + self.assetsManifest.version, request);
 
         const cache = await caches.open(cacheName);
