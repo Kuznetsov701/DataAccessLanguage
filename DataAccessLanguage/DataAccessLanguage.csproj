@@ -6,8 +6,8 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Модификация concat(expression|"constString" =&gt; fieldName...).</PackageReleaseNotes>
-    <Version>1.0.0.8</Version>
+    <PackageReleaseNotes>Реализация selectMany(expression).</PackageReleaseNotes>
+    <Version>1.0.0.9</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>
