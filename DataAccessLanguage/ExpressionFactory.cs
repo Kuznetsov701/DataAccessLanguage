@@ -46,6 +46,8 @@ namespace DataAccessLanguage
             { "groupBy", x => new GroupByPart(x) },
             { "map", x => new MapPart(x) },
             { "concat", x => new ConcatPart(x) },
+            { "trim", x => new TrimPart(x) },
+            { "split", x => new SplitPart(x) },
             { "avg", x => new AvgPart() },
             { "distinct", x => new DistinctPart(x) },
             { "selectMany", x => new SelectManyPart(x) }
