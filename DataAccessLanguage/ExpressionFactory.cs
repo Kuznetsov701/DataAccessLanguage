@@ -45,6 +45,7 @@ namespace DataAccessLanguage
             { "toUpper", x => new ToUpperPart() },
             { "groupBy", x => new GroupByPart(x) },
             { "map", x => new MapPart(x) },
+            { "switch", x => new SwitchPart(x) },
             { "concat", x => new ConcatPart(x) },
             { "trim", x => new TrimPart(x) },
             { "split", x => new SplitPart(x) },

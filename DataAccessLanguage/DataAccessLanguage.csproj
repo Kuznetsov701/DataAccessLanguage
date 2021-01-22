@@ -6,8 +6,8 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Реализация split(value) и trim(value).</PackageReleaseNotes>
-    <Version>1.0.1.1</Version>
+    <PackageReleaseNotes>Реализация switch.</PackageReleaseNotes>
+    <Version>1.0.1.2</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>
