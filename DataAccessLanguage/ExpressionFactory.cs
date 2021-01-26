@@ -49,6 +49,7 @@ namespace DataAccessLanguage
             { "concat", x => new ConcatPart(x) },
             { "trim", x => new TrimPart(x) },
             { "split", x => new SplitPart(x) },
+            { "replace", x => new ReplacePart(x) },
             { "avg", x => new AvgPart() },
             { "distinct", x => new DistinctPart(x) },
             { "selectMany", x => new SelectManyPart(x) }

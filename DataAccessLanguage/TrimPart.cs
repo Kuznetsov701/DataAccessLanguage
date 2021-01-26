@@ -16,9 +16,9 @@ namespace DataAccessLanguage
             dataObject switch
             {
                 IEnumerable<string> list => list?.Select(x => x?.Trim(separator?.ToArray()))?.ToList(),
-                string s => s?.Trim(separator?.ToArray())?.ToList(),
+                string s => s?.Trim(separator?.ToArray()),
                 IEnumerable<object> list => list?.Select(x => x?.ToString()?.Trim(separator?.ToArray()))?.ToList(),
-                not null => dataObject?.ToString()?.Trim(separator?.ToArray())?.ToList(),
+                not null => dataObject?.ToString()?.Trim(separator?.ToArray()),
                 _ => null
             };
 
