@@ -6,8 +6,8 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Реализация replcace(oldValue=&gt;newValue)</PackageReleaseNotes>
-    <Version>1.0.1.3</Version>
+    <PackageReleaseNotes>Модификация selectMany</PackageReleaseNotes>
+    <Version>1.0.1.4</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>

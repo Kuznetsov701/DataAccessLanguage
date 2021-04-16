@@ -17,7 +17,7 @@ namespace DataAccessLanguage
         public object GetValue(object obj) =>
             obj switch
             {
-                IEnumerable<object> list => list.SelectMany(x => expression.GetValue(x) as IEnumerable<object>).ToList(),
+                IEnumerable<object> list => list.SelectMany(x => expression.GetValue(x) as IEnumerable<object> ?? Enumerable.Empty<object>()).ToList(),
                 _ => null
             };
 
