@@ -52,7 +52,8 @@ namespace DataAccessLanguage
             { "replace", x => new ReplacePart(x) },
             { "avg", x => new AvgPart() },
             { "distinct", x => new DistinctPart(x) },
-            { "selectMany", x => new SelectManyPart(x) }
+            { "selectMany", x => new SelectManyPart(x) },
+            { "now", x => new NowPart() }
         };
     }
 }
