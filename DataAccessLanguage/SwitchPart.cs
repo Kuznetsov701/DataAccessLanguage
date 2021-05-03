@@ -3,19 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public sealed class SwitchPart : IExpressionPart
+    public sealed class SwitchPart : IAsyncExpressionPart
     {
         private Dictionary<string, IExpression> expressions = new Dictionary<string, IExpression>();
 
         public ExpressionType Type => ExpressionType.Function;
 
-        public SwitchPart(string parameter)
+        public SwitchPart(IExpressionFactory expressionFactory, string parameter)
         {
-            IExpressionFactory expressionFactory = new ExpressionFactory();
-
             Regex regex = new Regex(@"(?<expr>(((?!=>.*)[^(),=>]+)|(?<kek>\((?>[^()]+|\((?<depth>)|\)(?<-depth>))*(?(depth)(?!))\)))+)([\s]*=>[\s]*(?'name'[\w\d]+))*,{0,2}");
 
             var col = regex.Matches(parameter.Replace("\n.", ".").Replace("\n", " ").Replace("\r", " ").Replace("\t", " "));
@@ -57,5 +56,11 @@ namespace DataAccessLanguage
 
         public bool SetValue(object obj, object value) =>
             throw new NotImplementedException();
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

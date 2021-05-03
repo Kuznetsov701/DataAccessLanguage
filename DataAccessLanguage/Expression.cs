@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public class Expression : IExpression
+    public class Expression : IExpression, IAsyncExpression
     {
         private ExpressionNode head;
         private ExpressionNode tail;
@@ -12,7 +13,7 @@ namespace DataAccessLanguage
 
         public ExpressionType Type => ExpressionType.Function;
 
-        public IExpression Add(IExpressionPart expressionPart)
+        public IAsyncExpression Add(IAsyncExpressionPart expressionPart)
         {
             ExpressionNode node = new ExpressionNode { Current = expressionPart };
 
@@ -24,6 +25,12 @@ namespace DataAccessLanguage
 
             Count++;
 
+            return this;
+        }
+
+        public IExpression Add(IExpressionPart expressionPart)
+        {
+            this.Add(expressionPart as IAsyncExpressionPart);
             return this;
         }
 
@@ -71,9 +78,48 @@ namespace DataAccessLanguage
             return GetEnumerator();
         }
 
+        IEnumerator<IAsyncExpressionPart> IEnumerable<IAsyncExpressionPart>.GetEnumerator()
+        {
+            ExpressionNode node = head;
+            while (node != null)
+            {
+                yield return node.Current;
+                node = node.Next;
+            }
+        }
+
+        public async Task<object> GetValueAsync(object dataObject)
+        {
+            object res = dataObject;
+            foreach (IAsyncExpressionPart i in this)
+                res = await i.GetValueAsync(res);
+            return res;
+        }
+
+        public async Task<bool> SetValueAsync(object dataObject, object value)
+        {
+            object obj = dataObject;
+            ExpressionNode node = head;
+            for (int i = 0; i < Count - 1; i++)
+            {
+                object tmp = null;
+                if ((tmp = await node.Current.GetValueAsync(obj)) == null)
+                {
+                    if (node.Next.Current.Type == ExpressionType.Index)
+                        await node.Current.SetValueAsync(obj, tmp = new List<object>());
+                    else if (node.Next.Current.Type == ExpressionType.Selector)
+                        await node.Current.SetValueAsync(obj, tmp = new Dictionary<string, object>());
+                }
+                obj = tmp;
+                node = node.Next;
+            }
+
+            return await tail.Current.SetValueAsync(obj, value);
+        }
+
         private class ExpressionNode
         {
-            public IExpressionPart Current { get; set; }
+            public IAsyncExpressionPart Current { get; set; }
             public ExpressionNode Next { get; set; }
         }
     }

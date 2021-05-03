@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace DataAccessLanguage
+namespace DataAccessLanguage.Types
 {
-    class NowPart : IAsyncExpressionPart
+    public class StringFunction : IAsyncExpressionPart
     {
+        private string value;
+
+        public StringFunction(string value)
+        {
+            this.value = value;
+        }
+
         public ExpressionType Type => ExpressionType.Function;
 
-        public object GetValue(object dataObject) => DateTime.Now;
+        public object GetValue(object dataObject) => value;
 
         public bool SetValue(object dataObject, object value) =>
             throw new NotImplementedException();

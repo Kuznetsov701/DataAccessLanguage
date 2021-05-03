@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public class ForPart : IExpressionPart
+    public class ForPart : IAsyncExpressionPart
     {
         private int begin, end;
 
@@ -31,5 +32,11 @@ namespace DataAccessLanguage
                 IList<object> list => list.SetValues(begin, end == -1 ? list.Count() - 1 : end, value),
                 _ => false
             };
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

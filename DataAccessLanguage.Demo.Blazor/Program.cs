@@ -1,7 +1,9 @@
+using DataAccessLanguage.Extensions;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DataAccessLanguage.Demo.Blazor
@@ -18,7 +20,10 @@ namespace DataAccessLanguage.Demo.Blazor
             builder.Services.AddSingleton<HttpClient>();
             builder.Services.AddSingleton<IJsLazyLoad, JsLazyLoad>();
             builder.Services.AddSingleton<ICssLazyLoad, CssLazyLoad>();
-            builder.Services.AddSingleton<IExpressionFactory, ExpressionFactory>();
+
+            var jsonOptions = new JsonSerializerOptions();
+            jsonOptions.Converters.Add(new JsonToDictionaryConverter());
+            builder.Services.AddDataAccessLanguage((s, h) => { }, jsonOptions);
 
             await builder.Build().RunAsync();
         }

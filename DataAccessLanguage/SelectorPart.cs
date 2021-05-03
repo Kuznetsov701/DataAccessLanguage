@@ -1,10 +1,11 @@
 ﻿using DataAccessLanguage.Extensions;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public sealed class SelectorPart : IExpressionPart
+    public sealed class SelectorPart : IAsyncExpressionPart
     {
         private string key;
 
@@ -25,5 +26,11 @@ namespace DataAccessLanguage
                 object obj when obj.TryGetPropertyInfo(key, out PropertyInfo property) => property.TrySetValue(obj, value),
                 _ => false
             };
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

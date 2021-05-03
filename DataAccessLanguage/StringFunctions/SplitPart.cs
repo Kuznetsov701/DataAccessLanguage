@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public sealed class SplitPart : IExpressionPart
+    public sealed class SplitPart : IAsyncExpressionPart
     {
         private string separator;
 
@@ -24,5 +25,11 @@ namespace DataAccessLanguage
 
         public bool SetValue(object dataObject, object value) =>
             throw new NotImplementedException();
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

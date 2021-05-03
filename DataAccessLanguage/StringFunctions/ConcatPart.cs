@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public class ConcatPart : IExpressionPart
+    public class ConcatPart : IAsyncExpressionPart
     {
         private enum ConcatItemType
         {
@@ -18,10 +19,8 @@ namespace DataAccessLanguage
 
         public ExpressionType Type => ExpressionType.Function;
 
-        public ConcatPart(string parameter)
+        public ConcatPart(IExpressionFactory expressionFactory, string parameter)
         {
-            IExpressionFactory expressionFactory = new ExpressionFactory();
-
             Regex regex = new Regex(@"(""(?<text>[^&]+)"")|(?<expr>([^()&""]+|(\((?>[^()]+|\((?<depth>)|\)(?<-depth>))*(?(depth)(?!))\)))+)");
 
             foreach (Match x in regex.Matches(parameter))
@@ -55,5 +54,11 @@ namespace DataAccessLanguage
 
         public bool SetValue(object obj, object value) =>
             throw new NotImplementedException();
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

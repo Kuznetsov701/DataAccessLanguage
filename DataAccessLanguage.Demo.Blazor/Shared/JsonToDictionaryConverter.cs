@@ -7,11 +7,11 @@ namespace DataAccessLanguage.Demo.Blazor
 {
     public class JsonToDictionaryConverter : JsonConverterFactory
 	{
-		private static JsonConverter<Dictionary<string, object>> _valueConverter = null;
+		private static JsonConverter<object> _valueConverter = null;
 
 		public override bool CanConvert(Type typeToConvert)
 		{
-			return typeToConvert == typeof(Dictionary<string, object>);
+			return typeToConvert == typeof(object);
 		}
 
 		public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
@@ -19,16 +19,16 @@ namespace DataAccessLanguage.Demo.Blazor
 			return _valueConverter ?? (_valueConverter = new DictionaryConverterInner(options));
 		}
 
-		private class DictionaryConverterInner : JsonConverter<Dictionary<string, object>>
+		private class DictionaryConverterInner : JsonConverter<object>
 		{
 			private JsonSerializerOptions _options;
-			private JsonConverter<Dictionary<string, object>> _valueConverter = null;
+			private JsonConverter<object> _valueConverter = null;
 
-			JsonConverter<Dictionary<string, object>> converter
+			JsonConverter<object> converter
 			{
 				get
 				{
-					return _valueConverter ?? (_valueConverter = (JsonConverter<Dictionary<string, object>>)_options.GetConverter(typeof(Dictionary<string, object>)));
+					return _valueConverter ?? (_valueConverter = (JsonConverter<object>)_options.GetConverter(typeof(object)));
 				}
 			}
 
@@ -37,34 +37,34 @@ namespace DataAccessLanguage.Demo.Blazor
 				_options = options;
 			}
 
-			public override Dictionary<string, object> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+			public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 			{
-				if (reader.TokenType != JsonTokenType.StartObject)
+				if (reader.TokenType == JsonTokenType.StartObject)
 				{
-					throw new JsonException();
-				}
+					Dictionary<string, object> dictionary = new Dictionary<string, object>();
 
-				Dictionary<string, object> dictionary = new Dictionary<string, object>();
-
-				while (reader.Read())
-				{
-					if (reader.TokenType == JsonTokenType.EndObject)
+					while (reader.Read())
 					{
-						return dictionary;
+						if (reader.TokenType == JsonTokenType.EndObject)
+						{
+							return dictionary;
+						}
+
+						// Get the key.
+						if (reader.TokenType != JsonTokenType.PropertyName)
+						{
+							throw new JsonException();
+						}
+
+						string propertyName = reader.GetString();
+						reader.Read();
+
+						dictionary[propertyName] = getValue(ref reader, options);
 					}
-
-					// Get the key.
-					if (reader.TokenType != JsonTokenType.PropertyName)
-					{
-						throw new JsonException();
-					}
-
-					string propertyName = reader.GetString();
-					reader.Read();
-
-					dictionary[propertyName] = getValue(ref reader, options);
+					return dictionary;
 				}
-				return dictionary;
+				else
+					return getValue(ref reader, options);
 			}
 
 			private object getValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
@@ -104,31 +104,56 @@ namespace DataAccessLanguage.Demo.Blazor
 				throw new JsonException($"Unhandled TokenType {reader.TokenType}");
 			}
 
-			public override void Write(Utf8JsonWriter writer, Dictionary<string, object> hashtable, JsonSerializerOptions options)
+			public override void Write(Utf8JsonWriter writer, object hashtable, JsonSerializerOptions options)
 			{
-				writer.WriteStartObject();
-
-				foreach (KeyValuePair<string, object> kvp in hashtable)
+				if (hashtable is IDictionary<string, object>)
 				{
-					writer.WritePropertyName(kvp.Key);
+					writer.WriteStartObject();
 
-					if (converter != null &&
-						kvp.Value is Dictionary<string, object>)
+					foreach (KeyValuePair<string, object> kvp in (hashtable as Dictionary<string, object>))
 					{
-						converter.Write(writer, (Dictionary<string, object>)kvp.Value, options);
+						writer.WritePropertyName(kvp.Key);
+
+						if (converter != null &&
+							kvp.Value is Dictionary<string, object>)
+						{
+							converter.Write(writer, (Dictionary<string, object>)kvp.Value, options);
+						}
+						else if (kvp.Value is TimeSpan || kvp.Value is TimeSpan?)
+						{
+							writer.WriteStringValue(kvp.Value?.ToString());
+						}
+						else
+						{
+							JsonSerializer.Serialize(writer, kvp.Value, options);
+						}
 					}
-					else if (kvp.Value is TimeSpan || kvp.Value is TimeSpan?)
-					{
-						Console.WriteLine(kvp.Value);
-						writer.WriteStringValue(kvp.Value?.ToString());
-					}
-					else
-					{
-						JsonSerializer.Serialize(writer, kvp.Value, options);
-					}
+
+					writer.WriteEndObject();
 				}
+				else if (hashtable is IEnumerable<object>)
+				{
+					writer.WriteStartArray();
 
-				writer.WriteEndObject();
+					foreach (object kvp in (hashtable as IEnumerable<object>))
+					{
+						if (converter != null &&
+							kvp is Dictionary<string, object>)
+						{
+							converter.Write(writer, (Dictionary<string, object>)kvp, options);
+						}
+						else if (kvp is TimeSpan || kvp is TimeSpan?)
+						{
+							writer.WriteStringValue(kvp?.ToString());
+						}
+						else
+						{
+							JsonSerializer.Serialize(writer, kvp, options);
+						}
+					}
+
+					writer.WriteEndArray();
+				}
 			}
 		}
 	}

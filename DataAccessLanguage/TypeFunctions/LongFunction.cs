@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace DataAccessLanguage
+namespace DataAccessLanguage.Types
 {
-    class NowPart : IAsyncExpressionPart
+    public class LongFunction : IAsyncExpressionPart
     {
+        private long? value;
+
+        public LongFunction(string value)
+        {
+            if (long.TryParse(value, out long v))
+                this.value = v;
+        }
+
         public ExpressionType Type => ExpressionType.Function;
 
-        public object GetValue(object dataObject) => DateTime.Now;
+        public object GetValue(object dataObject) => value;
 
         public bool SetValue(object dataObject, object value) =>
             throw new NotImplementedException();

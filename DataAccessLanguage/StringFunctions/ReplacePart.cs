@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public sealed class ReplacePart : IExpressionPart
+    public sealed class ReplacePart : IAsyncExpressionPart
     {
         private string oldValue;
         private string newValue;
@@ -31,5 +32,11 @@ namespace DataAccessLanguage
 
         public bool SetValue(object dataObject, object value) =>
             throw new NotImplementedException();
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

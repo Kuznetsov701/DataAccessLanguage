@@ -1,4 +1,4 @@
-﻿map(
+﻿http(str(https://localhost:5001/defaultData.json)).get().map(
     taskEntity.idTaskEntity  && 
     taskEntity.title   =>    title &&
     steps.groupBy(employeeId)

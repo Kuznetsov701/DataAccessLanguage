@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public class GroupByPart : IAsyncExpressionPart
+    public class ConsolePart : IAsyncExpressionPart
     {
         public ExpressionType Type => ExpressionType.Function;
 
-        private IExpression expression;
-
-        public GroupByPart(IExpressionFactory expressionFactory, string parameter)
+        public object GetValue(object dataObject)
         {
-            expression = expressionFactory.Create(parameter);
+            Console.WriteLine(JsonSerializer.Serialize(dataObject));
+            return dataObject;
         }
-
-        public object GetValue(object dataObject) =>
-            dataObject switch
-            {
-                IEnumerable<object> e => e.GroupBy(x => expression.GetValue(x)),
-                _ => null
-            };
 
         public bool SetValue(object dataObject, object value) =>
             throw new NotImplementedException();

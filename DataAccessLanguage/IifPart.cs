@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public class IifPart : IExpressionPart
+    public class IifPart : IAsyncExpressionPart
     {
         private string trueValue;
         private string falseValue;
@@ -27,5 +28,11 @@ namespace DataAccessLanguage
 
         public bool SetValue(object dataObject, object value) =>
             throw new NotImplementedException();
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

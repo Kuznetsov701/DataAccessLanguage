@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    public class EqualsPart : IExpressionPart
+    public class EqualsPart : IAsyncExpressionPart
     {
         private string parameter;
         public ExpressionType Type => ExpressionType.Function;
@@ -23,5 +24,11 @@ namespace DataAccessLanguage
 
         public bool SetValue(object obj, object value) => 
             throw new NotImplementedException();
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }

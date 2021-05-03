@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataAccessLanguage
 {
-    class SelectManyPart : IExpressionPart
+    class SelectManyPart : IAsyncExpressionPart
     {
         private IExpression expression;
 
         public ExpressionType Type => ExpressionType.Function;
 
-        public SelectManyPart(string parameter)
+        public SelectManyPart(IExpressionFactory expressionFactory, string parameter)
         {
-            expression = new ExpressionFactory().Create(parameter);
+            expression = expressionFactory.Create(parameter);
         }
 
         public object GetValue(object obj) =>
@@ -27,5 +28,11 @@ namespace DataAccessLanguage
                 IEnumerable<object> list => list.Select(x => expression.SetValue(x, value)).ToList().Any(x => true),
                 _ => false
             };
+
+        public Task<object> GetValueAsync(object dataObject) =>
+            Task.FromResult(GetValue(dataObject));
+
+        public Task<bool> SetValueAsync(object dataObject, object value) =>
+            Task.FromResult(SetValue(dataObject, value));
     }
 }
