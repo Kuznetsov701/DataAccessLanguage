@@ -9,7 +9,7 @@ namespace DataAccessLanguage
 {
     public sealed class SwitchPart : IAsyncExpressionPart
     {
-        private Dictionary<string, IExpression> expressions = new Dictionary<string, IExpression>();
+        private List<KeyValuePair<string, IExpression>> expressions = new List<KeyValuePair<string, IExpression>>();
 
         public ExpressionType Type => ExpressionType.Function;
 
@@ -30,7 +30,7 @@ namespace DataAccessLanguage
                         name = "noname" + ((nonameCount == 0) ? "" : "_" + nonameCount.ToString());
                         nonameCount++;
                     }
-                    expressions.Add(name, expressionFactory.Create(x.Groups["expr"].Value));
+                    expressions.Add(KeyValuePair.Create(name, expressionFactory.Create(x.Groups["expr"].Value)));
                 }
             }
         }
@@ -40,12 +40,11 @@ namespace DataAccessLanguage
             {
                 IEnumerable<object> list => list.Select(x => Switch(x)).ToList(),
                 object o => Switch(o),
-                _ => null
+                _ => Switch(null)
             };
 
         private string Switch(object o)
         {
-            Dictionary<string, object> res = new Dictionary<string, object>();
             foreach (var expr in expressions)
             {
                 if (bool.TryParse(expr.Value.GetValue(o)?.ToString(), out bool b) && b)

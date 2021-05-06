@@ -6,11 +6,13 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Добавление now()</PackageReleaseNotes>
-    <Version>1.0.1.5</Version>
+    <PackageReleaseNotes>Http методы. Асинхронные выражения.</PackageReleaseNotes>
+    <Version>2.0.0-alpha</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>
+    <FileVersion>2.0.0</FileVersion>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
