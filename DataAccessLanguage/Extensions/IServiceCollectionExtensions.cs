@@ -112,6 +112,9 @@ namespace DataAccessLanguage.Extensions
                 { "long", x => new LongFunction(x) },
                 { "byte", x => new ByteFunction(x) },
 
+                { "dal", x => new DalPart(expressionFactory, x) },
+                { "format", x => new FormatPart(x) },
+
                 //{ "http", x => new HttpFunction(httpClient, this, this, x) },
                 //{ "post", x => new HttpPostFunction(this, x) },
                 //{ "get", x => new HttpGetFunction() },
