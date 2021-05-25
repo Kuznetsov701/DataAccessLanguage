@@ -7,12 +7,12 @@
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageReleaseNotes>Методы format() и dal()</PackageReleaseNotes>
-    <Version>2.0.1-alpha</Version>
+    <Version>2.0.2-alpha</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>
-    <FileVersion>2.0.1</FileVersion>
-    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <FileVersion>2.0.2</FileVersion>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
