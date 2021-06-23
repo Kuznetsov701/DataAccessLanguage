@@ -23,7 +23,7 @@ namespace DataAccessLanguage.Demo.Blazor
 
             var jsonOptions = new JsonSerializerOptions();
             jsonOptions.Converters.Add(new JsonToDictionaryConverter());
-            builder.Services.AddDataAccessLanguage((s, h) => { }, jsonOptions);
+            builder.Services.AddDataAccessLanguage(null, jsonOptions);
 
             await builder.Build().RunAsync();
         }

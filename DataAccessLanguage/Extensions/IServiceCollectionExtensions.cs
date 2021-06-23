@@ -3,7 +3,6 @@ using DataAccessLanguage.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace DataAccessLanguage.Extensions
@@ -16,10 +15,9 @@ namespace DataAccessLanguage.Extensions
             serviceCollection.AddSingleton<IAsyncExpressionFactory>(x => new ExpressionFactory(GetDefaultTypes));
         }
 
-        public static void AddDataAccessLanguage(this IServiceCollection serviceCollection, Action<IServiceProvider, HttpClient> configureHttpClient)
+        public static void AddDataAccessLanguage(this IServiceCollection serviceCollection, Action<IHttpClientBuilder> configureHttp)
         {
-            serviceCollection.AddHttpClient<IExpressionFactory, ExpressionFactory>((h, s) => {
-                configureHttpClient(s, h);
+            var httpBuilder = serviceCollection.AddHttpClient<IExpressionFactory, ExpressionFactory>((h, s) => {
                 var res = new ExpressionFactory(x => { 
                     var r = GetDefaultTypes(x);
                     r.Add("http", y => new HttpFunction(h, x, x, y));
@@ -29,8 +27,8 @@ namespace DataAccessLanguage.Extensions
                 });
                 return res;
             });
-            serviceCollection.AddHttpClient<IAsyncExpressionFactory, ExpressionFactory>((h, s) => {
-                configureHttpClient(s, h);
+            configureHttp?.Invoke(httpBuilder);
+            httpBuilder = serviceCollection.AddHttpClient<IAsyncExpressionFactory, ExpressionFactory>((h, s) => {
                 var res = new ExpressionFactory(x => {
                     var r = GetDefaultTypes(x);
                     r.Add("http", y => new HttpFunction(h, x, x, y));
@@ -40,12 +38,12 @@ namespace DataAccessLanguage.Extensions
                 });
                 return res;
             });
+            configureHttp?.Invoke(httpBuilder);
         }
 
-        public static void AddDataAccessLanguage(this IServiceCollection serviceCollection, Action<IServiceProvider, HttpClient> configureHttpClient, JsonSerializerOptions jsonSerializerOptions)
+        public static void AddDataAccessLanguage(this IServiceCollection serviceCollection, Action<IHttpClientBuilder> configureHttp, JsonSerializerOptions jsonSerializerOptions)
         {
-            serviceCollection.AddHttpClient<IExpressionFactory, ExpressionFactory>((h, s) => {
-                configureHttpClient(s, h);
+            var httpBuilder = serviceCollection.AddHttpClient<IExpressionFactory, ExpressionFactory>((h, s) => {
                 var res = new ExpressionFactory(x => {
                     var r = GetDefaultTypes(x);
                     r.Add("http", y => new HttpFunction(h, x, x, y));
@@ -55,8 +53,8 @@ namespace DataAccessLanguage.Extensions
                 });
                 return res;
             });
-            serviceCollection.AddHttpClient<IAsyncExpressionFactory, ExpressionFactory>((h, s) => {
-                configureHttpClient(s, h);
+            configureHttp?.Invoke(httpBuilder);
+            httpBuilder = serviceCollection.AddHttpClient<IAsyncExpressionFactory, ExpressionFactory>((h, s) => {
                 var res = new ExpressionFactory(x => {
                     var r = GetDefaultTypes(x);
                     r.Add("http", y => new HttpFunction(h, x, x, y));
@@ -66,6 +64,7 @@ namespace DataAccessLanguage.Extensions
                 });
                 return res;
             });
+            configureHttp?.Invoke(httpBuilder);
         }
 
         private static Dictionary<string, Func<string, IAsyncExpressionPart>> GetDefaultTypes(ExpressionFactory expressionFactory)
