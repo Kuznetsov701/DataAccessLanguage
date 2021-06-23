@@ -6,13 +6,13 @@
     <Description>Предоставляет доступ к данным объекта по строке запроса</Description>
     <PackageId>DataAccessLanguage</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Методы format() и dal()</PackageReleaseNotes>
-    <Version>2.0.1-alpha</Version>
+    <PackageReleaseNotes>Обновление метода switch</PackageReleaseNotes>
+    <Version>2.0.3-alpha</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Dev N</Company>
     <Authors>Dev N</Authors>
-    <FileVersion>2.0.1</FileVersion>
-    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <FileVersion>2.0.3</FileVersion>
+    <AssemblyVersion>2.0.3</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

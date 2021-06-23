@@ -18,12 +18,16 @@ namespace DataAccessLanguage
         public object GetValue(object obj)
         {
             string strExpr = expression.GetValue(obj)?.ToString();
+            if (strExpr == null)
+                return null;
             IExpression expr = expressionFactory.Create(strExpr);
             return expr.GetValue(obj);
         }
         public bool SetValue(object obj, object value)
         {
             string strExpr = expression.GetValue(obj)?.ToString();
+            if (strExpr == null)
+                return false;
             IExpression expr = expressionFactory.Create(strExpr);
             return expr.SetValue(obj, value);
         }
